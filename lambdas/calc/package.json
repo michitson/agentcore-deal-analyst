@@ -1,0 +1,21 @@
+{
+  "name": "@michitson/agentcore-calc-lambda",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AgentCore Gateway Lambda target exposing CRE IRR + sensitivity tools, backed by @michitson/cre-irr.",
+  "type": "module",
+  "main": "dist/handler.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "emit-schema": "npm run build && node scripts/emit-tools.mjs"
+  },
+  "dependencies": {
+    "@michitson/cre-irr": "^0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.2",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  }
+}

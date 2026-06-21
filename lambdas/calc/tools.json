@@ -1,0 +1,76 @@
+[
+  {
+    "name": "calculate_irr",
+    "description": "Compute the IRR for a commercial real estate deal from its purchase price, year-1 NOI, NOI growth rate, hold period, and exit cap rate. Returns the IRR %, total return %, year-1 cash flow, exit value, and the full cash-flow series. Deterministic bisection solver.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "purchasePrice": {
+          "type": "number",
+          "description": "Acquisition price in USD. Must be greater than 0."
+        },
+        "netOperatingIncome": {
+          "type": "number",
+          "description": "Year-1 net operating income (NOI) in USD."
+        },
+        "noiGrowthRate": {
+          "type": "number",
+          "description": "Annual NOI growth as a percent, e.g. 3 for 3%."
+        },
+        "holdPeriod": {
+          "type": "number",
+          "description": "Hold period in whole years. Must be at least 1."
+        },
+        "exitCapRate": {
+          "type": "number",
+          "description": "Exit capitalization rate as a percent, e.g. 6.5 for 6.5%. Must be greater than 0."
+        }
+      },
+      "required": [
+        "purchasePrice",
+        "netOperatingIncome",
+        "noiGrowthRate",
+        "holdPeriod",
+        "exitCapRate"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "run_sensitivity",
+    "description": "Run a one-variable-at-a-time tornado sensitivity for a CRE deal: sweep each input around the base case and report how much the IRR moves. Rate inputs sweep in basis points; dollar/period inputs sweep ±10/±20%. Variables are returned sorted by IRR spread (widest first).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "purchasePrice": {
+          "type": "number",
+          "description": "Acquisition price in USD. Must be greater than 0."
+        },
+        "netOperatingIncome": {
+          "type": "number",
+          "description": "Year-1 net operating income (NOI) in USD."
+        },
+        "noiGrowthRate": {
+          "type": "number",
+          "description": "Annual NOI growth as a percent, e.g. 3 for 3%."
+        },
+        "holdPeriod": {
+          "type": "number",
+          "description": "Hold period in whole years. Must be at least 1."
+        },
+        "exitCapRate": {
+          "type": "number",
+          "description": "Exit capitalization rate as a percent, e.g. 6.5 for 6.5%. Must be greater than 0."
+        }
+      },
+      "required": [
+        "purchasePrice",
+        "netOperatingIncome",
+        "noiGrowthRate",
+        "holdPeriod",
+        "exitCapRate"
+      ],
+      "additionalProperties": false
+    }
+  }
+]
