@@ -1,0 +1,60 @@
+[
+  {
+    "name": "get_market_cap_rates",
+    "description": "Look up prevailing going-in and exit cap-rate benchmarks for a market and property type. Use this to ground a deal’s exit cap rate assumption in market context. Returns SYNTHETIC reference data (demo dataset, not real market quotes).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "market": {
+          "type": "string",
+          "description": "Metro market name, e.g. \"Austin\", \"Manhattan\", \"Phoenix\"."
+        },
+        "propertyType": {
+          "type": "string",
+          "enum": [
+            "multifamily",
+            "office",
+            "industrial"
+          ],
+          "description": "Property type."
+        }
+      },
+      "required": [
+        "market",
+        "propertyType"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "get_comparable_sales",
+    "description": "Return recent comparable sales (address, sale price, NOI, cap rate, date) for a market and property type, to sanity-check a deal against the market. Returns SYNTHETIC comps (demo dataset, not real sales).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "market": {
+          "type": "string",
+          "description": "Metro market name, e.g. \"Austin\", \"Manhattan\", \"Phoenix\"."
+        },
+        "propertyType": {
+          "type": "string",
+          "enum": [
+            "multifamily",
+            "office",
+            "industrial"
+          ],
+          "description": "Property type."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Max number of comps to return (1–3). Defaults to 3."
+        }
+      },
+      "required": [
+        "market",
+        "propertyType"
+      ],
+      "additionalProperties": false
+    }
+  }
+]

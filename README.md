@@ -36,6 +36,13 @@ Gateway target.
   package. `tools.json` (generated from `src/tools.ts`) is the schema Gateway
   registers. 13 tests cover the Gateway contract, input coercion, and error
   mapping.
+- **`lambdas/data/`** — the market reference-data Gateway target. Dispatches
+  `get_market_cap_rates` and `get_comparable_sales` so the agent can ground its
+  exit-cap assumption and sanity-check a deal against comps. Built **mock-first**:
+  the handler depends only on a `DataRepository` interface, with a deterministic
+  **synthetic** `FixtureRepository` today (every value flagged `source: 'synthetic'`;
+  comps are internally consistent — `salePrice === NOI ÷ capRate`) and a real
+  Athena-backed repository to drop in later via `createHandler(repo)`. 16 tests.
 
 ### The Gateway → Lambda contract
 
@@ -53,7 +60,8 @@ tool error instead of a stack trace.
 
 ## What's next
 
-- `lambdas/data/` — Athena-backed market-data tools.
+- Swap the `data` Lambda's synthetic `FixtureRepository` for a real
+  Athena-backed repository (S3 + Glue catalog + Athena workgroup).
 - Harness configuration (`agentcore.json`): model + instructions (ported from
   the v1 system prompt) + the two Gateway targets.
 - Thin Next.js front end + invocation proxy (ADR 0003, "Shape A").

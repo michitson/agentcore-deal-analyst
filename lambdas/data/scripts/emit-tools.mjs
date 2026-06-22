@@ -1,0 +1,15 @@
+/**
+ * Generate tools.json — the inline tool schema consumed by
+ * `agentcore add gateway-target --tool-schema-file tools.json`. Run via
+ * `npm run emit-schema` (builds first, then runs against dist/tools.js) so the
+ * registered schema can never drift from what the handler dispatches.
+ */
+import { writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { TOOLS } from '../dist/tools.js';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const out = resolve(here, '..', 'tools.json');
+writeFileSync(out, JSON.stringify(TOOLS, null, 2) + '\n');
+console.log(`Wrote ${TOOLS.length} tool definition(s) to ${out}`);
