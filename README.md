@@ -43,6 +43,14 @@ Gateway target.
   **synthetic** `FixtureRepository` today (every value flagged `source: 'synthetic'`;
   comps are internally consistent — `salePrice === NOI ÷ capRate`) and a real
   Athena-backed repository to drop in later via `createHandler(repo)`. 16 tests.
+- **`harness/`** — the **agent-as-config** artifact: `instructions.md` (the
+  system prompt, ported from v1) compiled by `build-config.mjs` into
+  `deal-analyst.harness.json` (a `CreateHarness` body — model + instructions +
+  the two Gateway tools + limits). No agent loop is authored; the agent *is* this
+  config. See `harness/README.md` for the **"config ceiling" finding** — porting
+  v1 collapsed 4 tools to 2 (the stateful field-accumulators disappear; the
+  guided flow moves into instructions + the model's context) — and the
+  (billable) deploy steps.
 
 ### The Gateway → Lambda contract
 
@@ -60,10 +68,11 @@ tool error instead of a stack trace.
 
 ## What's next
 
+- **Deploy** (the first billable step): deploy the two Lambdas, create a Gateway
+  per Lambda, fill the ARNs into `deal-analyst.harness.json`, and `create-harness`.
+  Steps in `harness/README.md`.
 - Swap the `data` Lambda's synthetic `FixtureRepository` for a real
   Athena-backed repository (S3 + Glue catalog + Athena workgroup).
-- Harness configuration (`agentcore.json`): model + instructions (ported from
-  the v1 system prompt) + the two Gateway targets.
 - Thin Next.js front end + invocation proxy (ADR 0003, "Shape A").
 
 ## Develop
