@@ -1,0 +1,45 @@
+{
+  "targets": {
+    "default": {
+      "resources": {
+        "mcp": {
+          "gateways": {
+            "data": {
+              "gatewayId": "dealanalyst-data-3nnnbhg09h",
+              "gatewayArn": "arn:aws:bedrock-agentcore:us-west-2:571029153751:gateway/dealanalyst-data-3nnnbhg09h",
+              "gatewayUrl": "https://dealanalyst-data-3nnnbhg09h.gateway.bedrock-agentcore.us-west-2.amazonaws.com/mcp",
+              "targets": {
+                "data": {
+                  "targetId": "OZISRBQPW6"
+                }
+              }
+            },
+            "calc": {
+              "gatewayId": "dealanalyst-calc-ukpswppwx0",
+              "gatewayArn": "arn:aws:bedrock-agentcore:us-west-2:571029153751:gateway/dealanalyst-calc-ukpswppwx0",
+              "gatewayUrl": "https://dealanalyst-calc-ukpswppwx0.gateway.bedrock-agentcore.us-west-2.amazonaws.com/mcp",
+              "targets": {
+                "calc": {
+                  "targetId": "PYNNAJT9PO"
+                }
+              }
+            }
+          }
+        },
+        "harnesses": {
+          "deal_analyst": {
+            "harnessId": "dealanalyst_deal_analyst-5x5YJDa2c9",
+            "harnessArn": "arn:aws:bedrock-agentcore:us-west-2:571029153751:harness/dealanalyst_deal_analyst-5x5YJDa2c9",
+            "roleArn": "arn:aws:iam::571029153751:role/dealanalyst_deal_analyst",
+            "status": "READY",
+            "harnessVersion": 2,
+            "agentRuntimeArn": "arn:aws:bedrock-agentcore:us-west-2:571029153751:runtime/harness_dealanalyst_deal_analyst-sp7FATAkLK",
+            "provisioner": "cloudformation"
+          }
+        },
+        "stackName": "AgentCore-dealanalyst-default",
+        "deployHash": "b184e81c5374286f"
+      }
+    }
+  }
+}

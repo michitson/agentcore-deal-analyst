@@ -86,6 +86,50 @@ incur charges. Run them yourself with your AWS credentials when ready.
    Session state, memory, identity, and observability are managed — there is no
    DynamoDB, no session map, no audit-log plumbing to write. That's the point.
 
+## As deployed (2026-07-03) — what the runbook got wrong
+
+The deploy above was executed on 2026-07-03 and **works end-to-end** (all four
+tools verified live: IRR 10.564% on the standard case, tornado, cap rates,
+comps — with session continuity across turns). But the path differed from the
+runbook in ways worth recording:
+
+1. **`aws bedrock-agentcore-control create-harness` doesn't exist** in the
+   installed AWS CLI (2.30.1). The supported path is the `agentcore` CLI
+   project flow, which now owns the whole lifecycle: `agentcore add gateway` /
+   `add gateway-target` / `add harness` / `add tool --type agentcore_gateway`,
+   then `agentcore deploy` (CDK). The project config lives in `../agentcore/`;
+   this folder's `deal-analyst.harness.json` remains the documented contract
+   (its ARNs are now the real deployed ones). `add tool --gateway <name>`
+   resolves ARNs from *deployed* state, so the order is: deploy gateways
+   first, then attach harness tools, then deploy again.
+
+2. **Two gateways on one harness collide on semantic search.** Each Gateway
+   injects an `x_amz_bedrock_agentcore_search` tool by default; the harness
+   (Strands underneath) refuses duplicate tool names and the invoke dies.
+   Fix: `enableSemanticSearch: false` on both gateways — 4 tools don't need
+   semantic search anyway.
+
+3. **`@aws/agentcore-cdk` can't express "semantic search off".** It renders
+   `searchType: 'NONE'`, which CloudFormation's enum rejects (only
+   `SEMANTIC` exists; "off" = omit the field — but the MCP block must then be
+   non-empty, and `supportedVersions` can't change on an existing gateway).
+   Local patch in `../agentcore/cdk/node_modules/@aws/agentcore-cdk/dist/cdk/constructs/components/mcp/Gateway.js`
+   (`buildProtocolConfiguration`): emit `{ supportedVersions: ['2025-03-26'] }`
+   when disabled. ⚠️ **This patch lives in `node_modules` and dies on the next
+   `npm install`** — re-apply it (or check for a fixed CLI release) before any
+   future `agentcore deploy`.
+
+Deployed resources (account 571029153751, us-west-2 — all billable, teardown =
+`aws cloudformation delete-stack --stack-name AgentCore-dealanalyst-default`
+plus the two Lambdas and `deal-analyst-lambda-role`):
+
+| Resource | Value |
+| --- | --- |
+| Harness | `dealanalyst_deal_analyst-5x5YJDa2c9` (v2, READY) |
+| Gateway calc | `dealanalyst-calc-ukpswppwx0` |
+| Gateway data | `dealanalyst-data-3nnnbhg09h` |
+| Lambdas | `deal-analyst-calc`, `deal-analyst-data` (Node 22, ARM64) |
+
 ## Schema provenance
 
 The config shape is grounded in the AgentCore control-plane API reference:

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://schema.agentcore.aws.dev/v1/agentcore.json",
+  "name": "dealanalyst",
+  "version": 1,
+  "managedBy": "CDK",
+  "tags": {
+    "agentcore:created-by": "agentcore-cli",
+    "agentcore:project-name": "dealanalyst"
+  },
+  "runtimes": [],
+  "memories": [],
+  "knowledgeBases": [],
+  "credentials": [],
+  "evaluators": [],
+  "onlineEvalConfigs": [],
+  "agentCoreGateways": [
+    {
+      "name": "calc",
+      "protocolType": "MCP",
+      "description": "CRE IRR + sensitivity tools (Lambda-backed)",
+      "targets": [
+        {
+          "name": "calc",
+          "targetType": "lambdaFunctionArn",
+          "lambdaFunctionArn": {
+            "lambdaArn": "arn:aws:lambda:us-west-2:571029153751:function:deal-analyst-calc",
+            "toolSchemaFile": "lambdas/calc/tools.json"
+          }
+        }
+      ],
+      "authorizerType": "AWS_IAM",
+      "enableSemanticSearch": false,
+      "exceptionLevel": "NONE"
+    },
+    {
+      "name": "data",
+      "protocolType": "MCP",
+      "description": "CRE market reference data (Lambda-backed, synthetic)",
+      "targets": [
+        {
+          "name": "data",
+          "targetType": "lambdaFunctionArn",
+          "lambdaFunctionArn": {
+            "lambdaArn": "arn:aws:lambda:us-west-2:571029153751:function:deal-analyst-data",
+            "toolSchemaFile": "lambdas/data/tools.json"
+          }
+        }
+      ],
+      "authorizerType": "AWS_IAM",
+      "enableSemanticSearch": false,
+      "exceptionLevel": "NONE"
+    }
+  ],
+  "policyEngines": [],
+  "configBundles": [],
+  "abTests": [],
+  "harnesses": [
+    {
+      "name": "deal_analyst",
+      "path": "app/deal_analyst"
+    }
+  ],
+  "datasets": [],
+  "payments": []
+}
